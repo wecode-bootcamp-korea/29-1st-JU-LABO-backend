@@ -12,9 +12,9 @@ class SubCategory(models.Model):
     class Meta:
         db_table = 'subcategories'
 
-class Category_Join(models.Model):
+class CategoryJoin(models.Model):
     category     = models.ForeignKey(Category, on_delete=models.CASCADE)
-    subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
+    subcategory  = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'category_joins'
+        db_table = 'categoryjoins'

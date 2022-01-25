@@ -1,11 +1,11 @@
 from django.db import models
 
-from categories.models import Category_Join
+from categories.models import CategoryJoin
 
 class Product(models.Model):
-    category_join = models.ForeignKey(Category_Join, on_delete=models.CASCADE)
+    category_join = models.ForeignKey(CategoryJoin, on_delete=models.CASCADE)
     name          = models.CharField(max_length=50)
-    product_group = models.ForeignKey('Product_Group', on_delete=models.CASCADE)
+    product_group = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
     price         = models.DecimalField(decimal_places=2, max_digits=6)
     ml            = models.IntegerField()
     description   = models.CharField(max_length=500)
@@ -21,8 +21,8 @@ class Image(models.Model):
     class Meta:
         db_table = 'images'
 
-class Product_Group(models.Model):
+class ProductGroup(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'product_groups'
+        db_table = 'productgroups'
