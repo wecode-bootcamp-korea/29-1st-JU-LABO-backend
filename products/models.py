@@ -3,9 +3,9 @@ from django.db import models
 from categories.models import CategoryJoin
 
 class Product(models.Model):
-    category_join = models.ForeignKey(CategoryJoin, on_delete=models.CASCADE)
+    categoryjoin = models.ForeignKey(CategoryJoin, on_delete=models.CASCADE)
     name          = models.CharField(max_length=50)
-    product_group = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
+    productgroup = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
     price         = models.DecimalField(decimal_places=2, max_digits=6)
     ml            = models.IntegerField()
     description   = models.CharField(max_length=500)
