@@ -26,6 +26,5 @@ class ProductGroup(models.Model):
     name    = models.CharField(max_length=50)
     image_url = models.URLField(max_length=1000)
     
-
     class Meta:
         db_table = 'productgroups'
