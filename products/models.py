@@ -23,7 +23,7 @@ class Image(models.Model):
         db_table = 'images'
 
 class ProductGroup(models.Model):
-    name = models.CharField(max_length=50)
+    name    = models.CharField(max_length=50)
     img_url = models.URLField(max_length=1000)
     
 
