@@ -10,6 +10,7 @@ class Product(models.Model):
     ml            = models.IntegerField()
     description   = models.CharField(max_length=500)
     inventory     = models.IntegerField()
+    is_default    = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'products'
@@ -23,6 +24,8 @@ class Image(models.Model):
 
 class ProductGroup(models.Model):
     name = models.CharField(max_length=50)
+    img_url = models.URLField(max_length=1000)
+    
 
     class Meta:
         db_table = 'productgroups'
