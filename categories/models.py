@@ -6,15 +6,15 @@ class Category(models.Model):
     class Meta:
         db_table = 'categories'
 
-class Sub_Category(models.Model):
+class SubCategory(models.Model):
     name = models.CharField(max_length=50)
 
     class Meta:
-        db_table = 'sub_categories'
+        db_table = 'subcategories'
 
-class Category_Join(models.Model):
+class CategoryJoin(models.Model):
     category     = models.ForeignKey(Category, on_delete=models.CASCADE)
-    sub_category = models.ForeignKey(Sub_Category, on_delete=models.CASCADE)
+    subcategory  = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
     class Meta:
-        db_table = 'category_joins'
+        db_table = 'categoryjoins'
