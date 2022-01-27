@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from .models import Product, Image
 
 class ProductDetailView(View):
-    def get(self, request):
+    def get(self, request): #TODO: productgroup_id 받기
         if not Product.objects.filter(productgroup_id=2).exists():
             return JsonResponse({'message':'productgroup_id error'}, status=400)
 
@@ -26,6 +26,8 @@ class ProductDetailView(View):
                     ]
                 } for product in products
             ]
-            return JsonResponse({'products': results}, status=200)
+            mls    = [result['ml'] for result in results]
+            prices = [result['price'] for result in results]
+            return JsonResponse({'products': results, 'mls': mls, 'prices': prices}, status=200)
         except Exception: # TODO: except 별로 작성하기
             return JsonResponse({'message': 'fail'}, status=400)
