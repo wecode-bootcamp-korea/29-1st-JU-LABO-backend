@@ -14,17 +14,17 @@ class Product(models.Model):
 
     class Meta:
         db_table = 'products'
-
+ 
 class Image(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    img_url = models.URLField(max_length=1000)
+    image_url = models.URLField(max_length=1000)
 
     class Meta:
         db_table = 'images'
 
 class ProductGroup(models.Model):
     name    = models.CharField(max_length=50)
-    img_url = models.URLField(max_length=1000)
+    image_url = models.URLField(max_length=1000)
     
 
     class Meta:
