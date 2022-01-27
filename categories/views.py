@@ -21,19 +21,15 @@ class SubCategoryView(View):
       if not CategoryJoin.objects.filter(category_id = category_id, subcategory_id = subcategory_id).exists():
         return JsonResponse({'message':'INVALID_CATEGORY'}, status=400)
 
-      result = []
-      categoryjoin = CategoryJoin.objects.filter(category_id = category_id, subcategory_id = subcategory_id)[0].product_set.all()
+      result = [{
+        'name' : category.name,
+        'ml'   : category.ml,
+        'price': category.price,
+        'categoryjoin': SubCategory.objects.get(id = category.categoryjoin.subcategory_id).name
+      } for category in CategoryJoin.objects.filter(category_id = category_id, subcategory_id = subcategory_id)[0].product_set.all()]
 
-      for i in categoryjoin:
-        result.append({
-          'name'        : i.name,
-          'ml'          : i.ml,
-          'price'       : i.price,
-          'categoryjoin': SubCategory.objects.get(id = i.categoryjoin.subcategory_id).name,
-        })
-
+        
       return JsonResponse({'result': result}, status= 200)
-
     except:
       return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
 
