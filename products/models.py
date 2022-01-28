@@ -1,16 +1,16 @@
 from django.db import models
 
-from categories.models import CategorySubCatergory
+from categories.models import CategorySubCategory
 
 class Product(models.Model):
-    categoryjoin  = models.ForeignKey(CategorySubCatergory, on_delete=models.CASCADE)
-    name          = models.CharField(max_length=50)
-    productgroup  = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
-    price         = models.DecimalField(decimal_places=2, max_digits=6)
-    ml            = models.IntegerField()
-    description   = models.CharField(max_length=500)
-    inventory     = models.IntegerField()
-    is_default    = models.BooleanField(default=False)
+    categorysubcategory  = models.ForeignKey(CategorySubCategory, on_delete=models.CASCADE)
+    name                 = models.CharField(max_length=50)
+    productgroup         = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
+    price                = models.DecimalField(decimal_places=2, max_digits=6)
+    ml                   = models.IntegerField()
+    description          = models.CharField(max_length=500)
+    inventory            = models.IntegerField()
+    is_default           = models.BooleanField(default=False)
 
     class Meta:
         db_table = 'products'

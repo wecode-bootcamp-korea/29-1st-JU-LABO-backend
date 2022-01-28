@@ -12,7 +12,7 @@ class SubCategory(models.Model):
     class Meta:
         db_table = 'subcategories'
 
-class CategorySubCatergory(models.Model):
+class CategorySubCategory(models.Model):
     category     = models.ForeignKey(Category, on_delete=models.CASCADE)
     subcategory  = models.ForeignKey(SubCategory, on_delete=models.CASCADE)
 
