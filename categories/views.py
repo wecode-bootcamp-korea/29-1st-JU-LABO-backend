@@ -14,15 +14,18 @@ class ProductListView(View):
       if not CategorySubCategory.objects.filter(category_id = category_id, subcategory_id = subcategory_id).exists():
         return JsonResponse({'message':'INVALID_CATEGORY'}, status=400)
 
-      ProductList = [{
+      Products = [{
         'id'          : product.id,
         'name'        : product.name,
         'ml'          : product.ml,
         'price'       : product.price,
-        'categoryjoin': SubCategory.objects.get(id = product.categoryjoin.subcategory_id).name
+        'category': {
+          'category_id'  : SubCategory.objects.get(id = product.categorysubcategory.subcategory_id).id,
+          'category_name': SubCategory.objects.get(id = product.categorysubcategory.subcategory_id).name
+        }
       } for product in CategorySubCategory.objects.filter(category_id = category_id, subcategory_id = subcategory_id)[0].product_set.all()]
 
-      return JsonResponse({'productlist': ProductList}, status= 200)
+      return JsonResponse({'products': Products}, status= 200)
 
     except:
       return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
