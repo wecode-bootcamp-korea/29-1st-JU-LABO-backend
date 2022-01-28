@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views      import CategoryView
+from .views      import SubCategoriesView
 
 urlpatterns = {
-  path('/category', CategoryView.as_view()),
+  path('/subcategory', SubCategoriesView.as_view()),
 }

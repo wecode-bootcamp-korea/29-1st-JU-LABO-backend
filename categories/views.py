@@ -5,7 +5,7 @@ from django.views           import View
 
 from .models                import SubCategory
 
-class CategoryView(View):
+class SubCategoriesView(View):
   def get(self,request):
 
     sub_categories = [{
