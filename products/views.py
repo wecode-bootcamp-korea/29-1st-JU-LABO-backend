@@ -3,7 +3,7 @@ from django.http import JsonResponse
 
 from .models import Product, Image
 
-class ProductDetailView(View):
+class ProductGroupDetailView(View):
     def get(self, request): #TODO: productgroup_id 받기
         if not Product.objects.filter(productgroup_id=2).exists():
             return JsonResponse({'message':'productgroup_id error'}, status=400)
@@ -14,8 +14,8 @@ class ProductDetailView(View):
             results = [
                 {
                     'name'               : product.name,
-                    'category'           : product.categoryjoin.category.name,
-                    'subcategory'        : product.categoryjoin.subcategory.name,
+                    'category'           : product.categorysubcategory.category.name,
+                    'subcategory'        : product.categorysubcategory.subcategory.name,
                     'ml'                 : product.ml,
                     'price'              : product.price,
                     'description'        : product.description,
@@ -29,5 +29,5 @@ class ProductDetailView(View):
             mls    = [result['ml'] for result in results]
             prices = [result['price'] for result in results]
             return JsonResponse({'products': results, 'mls': mls, 'prices': prices}, status=200)
-        except Exception: # TODO: except 별로 작성하기
-            return JsonResponse({'message': 'fail'}, status=400)
+        except IndexError: # TODO: except 별로 작성하기
+            return JsonResponse({'message': 'Index Error'}, status=400)

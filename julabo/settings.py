@@ -4,10 +4,10 @@ import pymysql
 
 from my_settings import DATABASES, SECRET_KEY
 
-pymysql.install_as_MySQLdb()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+pymysql.install_as_MySQLdb()
 
 
 # Quick-start development settings - unsuitable for production
@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'django_extensions',
     'users',
     'products',
-    'categories'
+    'categories',
 ]
 
 MIDDLEWARE = [

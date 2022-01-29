@@ -382,8 +382,6 @@ zsdoc/data
 
 my_settings.py
 
-bulk.py
-
 migrations
 
 __pycache__
