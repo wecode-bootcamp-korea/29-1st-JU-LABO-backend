@@ -1,3 +1,4 @@
+from wsgiref.simple_server import demo_app
 from django.db import models
 
 from products.models import Product
@@ -17,7 +18,7 @@ class User(models.Model):
 class Cart(models.Model):
     user     = models.ForeignKey(User, on_delete=models.CASCADE)
     product  = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.IntegerField() # TODO: default = 0
+    quantity = models.IntegerField(default=0)
 
     class Meta:
         db_table = 'carts'
