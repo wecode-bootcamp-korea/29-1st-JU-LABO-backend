@@ -1,10 +1,7 @@
 from django.urls import path,include
 
+from products.views import ProductDetailView
+
 urlpatterns = [
-<<<<<<< HEAD
-    
+    path('products', ProductDetailView.as_view())
 ]
-=======
-  path('categories', include('categories.urls')),
-]
->>>>>>> main
