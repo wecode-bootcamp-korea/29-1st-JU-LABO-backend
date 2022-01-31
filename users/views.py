@@ -7,7 +7,6 @@ from django.core.exceptions import ValidationError
 from my_settings            import SECRET_KEY,ALGORITHM
 from users.models           import User
 
-
 REGEX_EMAIL = "^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+$"
 REGEX_PASSWORD = "^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$"
 
@@ -19,7 +18,6 @@ class SignUpView(View):
             lastname           = data['last_name']
             email              = data['email']
             password           = data['password']
-
 
             if User.objects.filter(email = email).exists():
                 return JsonResponse({'message' : 'EMAIL_ALREADY_EXISTS'}, status=400)    
@@ -41,7 +39,7 @@ class SignUpView(View):
             )
 
             return JsonResponse({'message':'SUCCESS'},status=200)
-    
+
         except KeyError:
             return JsonResponse({"message" : "KEY_ERROR"}, status=401)
 
@@ -53,15 +51,11 @@ class LogInView(View):
 
             if not User.objects.filter(email = user.email).exists():
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
-                
+
             if bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
                 
                 return JsonResponse({'message':'SUCCESS','token':token}, status=201)
-                  
+
         except KeyError:
-            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)        
-
-
-
-
+            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)
