@@ -15,12 +15,12 @@ class CartView(View):
         product_id = data['product_id']
         quantity = data['quantity']
 
-        Cart.objects.update_or_create(
-            user_id=user_id, 
-            product_id=product_id, 
-            quantity=quantity
-            )
-        
+        cart, is_created = Cart.objects.get_or_create(
+            user_id=user_id, product_id=product_id)
+            
+        cart.quantity = quantity
+        cart.save()
+
         return JsonResponse({'message': '등록성공'}, status=200)
 
     def get(self, request):
