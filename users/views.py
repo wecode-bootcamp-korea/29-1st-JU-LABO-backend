@@ -20,6 +20,7 @@ class SignUpView(View):
             email              = data['email']
             password           = data['password']
 
+
             if User.objects.filter(email = email).exists():
                 return JsonResponse({'message' : 'EMAIL_ALREADY_EXISTS'}, status=400)    
             
@@ -36,7 +37,7 @@ class SignUpView(View):
                 last_name             = lastname,
                 email                 = email,
                 password              = hashed_password,
-                
+                is_agree              = 'False'            
             )
 
             return JsonResponse({'message':'SUCCESS'},status=200)
@@ -46,21 +47,20 @@ class SignUpView(View):
 
 class LogInView(View):
     def post(self,request):
-        data = json.loads(request.body) 
-        try: 
-            if not User.objects.filter(
-                email    = data['email'],
-                password = data['password'],
-                ).exists():
+        try:
+            data = json.loads(request.body) 
+            user  = User.objects.get(email=data['email'])
+
+            if not User.objects.filter(email = user.email).exists():
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
-            if bcrypt.checkpw(data['password'].encode('utf-8'), User.password.encode('utf-8')):
-                token = jwt.encode({'id': User.id}, SECRET_KEY, algorithm=ALGORITHM)
-                return JsonResponse({'token':token}, status=200)
-
-            return JsonResponse({'message':'SUCCESS'},status=200) 
-
+                
+            if bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
+                token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
+                
+                return JsonResponse({'message':'SUCCESS','token':token}, status=201)
+                  
         except KeyError:
-            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
+            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)        
 
 
 
