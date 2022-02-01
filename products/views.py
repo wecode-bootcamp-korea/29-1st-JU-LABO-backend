@@ -4,12 +4,12 @@ from django.http import JsonResponse
 from .models import Product, Image
 
 class ProductGroupDetailView(View):
-    def get(self, request): #TODO: productgroup_id 받기
-        if not Product.objects.filter(productgroup_id=2).exists():
+    def get(self, request, product_id): #TODO: productgroup_id 받기
+        if not Product.objects.filter(productgroup_id=product_id).exists():
             return JsonResponse({'message':'productgroup_id error'}, status=400)
 
         try:
-            products = Product.objects.filter(productgroup_id=2).order_by('is_default')
+            products = Product.objects.filter(productgroup_id=product_id).order_by('is_default')
 
             results = [
                 {
