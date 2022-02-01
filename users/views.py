@@ -8,26 +8,27 @@ from django.db.models import F
 from users.models import User, Cart
 
 class CartView(View):
+    # @login_decorator
     def post(self, request):
         data = json.loads(request.body)
 
+        # user_id = request.user
         user_id = data['user_id']
         product_id = data['product_id']
         quantity = data['quantity']
 
         cart, is_created = Cart.objects.get_or_create(
             user_id=user_id, product_id=product_id)
-            
+
         cart.quantity = quantity
         cart.save()
 
         return JsonResponse({'message': '등록성공'}, status=200)
 
+    # @login_decorator
     def get(self, request):
-        # user_id = data['user_id']
-        # data = json.loads(request.body)
+        # user_id = request.user
         user_id = 1
-        # user_id = data['user_id']
         
         items = Cart.objects.filter(user_id=user_id)
         

@@ -5,5 +5,5 @@ from users.views import CartView
 
 urlpatterns = [
     # path('products', ProductDetailView.as_view())
-    path('carts', CartView.as_view())
+    path('cart', CartView.as_view())
 ]
