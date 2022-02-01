@@ -3,7 +3,6 @@ import datetime
 
 from django.views import View
 from django.http  import JsonResponse
-from django.db.models import F
 
 from users.models import User, Cart
 
@@ -51,3 +50,14 @@ class CartView(View):
         return JsonResponse({'results': results, 
                     'total_price': total_price, 
                     'order_date': order_date}, status=200)
+
+    # @login_decorator
+    def delete(self, request, item_id):
+        user_id = request.user
+
+        try:
+            item = Cart.objects.get(user_id=user_id, product_id=item_id)
+            item.delete()
+            return JsonResponse({'message': 'Success'}, status=200)
+        except User.DoesNotExist:
+            return JsonResponse({'message': 'User Does Not Exist'}, status=400)
