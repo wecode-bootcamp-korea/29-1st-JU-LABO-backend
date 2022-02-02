@@ -1,3 +1,4 @@
+from itertools import product
 import json
 import datetime
 
@@ -52,12 +53,15 @@ class CartView(View):
                     'order_date': order_date}, status=200)
 
     # @login_decorator
-    def delete(self, request, item_id):
-        user_id = request.user
+    def delete(self, request):
+        # user_id = request.user
+        data = json.loads(request.body)
+        user_id = data['user_id']
+        product_id = data['product_id']
 
         try:
-            item = Cart.objects.get(user_id=user_id, product_id=item_id)
-            item.delete()
-            return JsonResponse({'message': 'Success'}, status=200)
+            product = Cart.objects.get(user_id=user_id, product_id=product_id)
+            product.delete()
+            return JsonResponse({'message': '삭제성공'}, status=200)
         except User.DoesNotExist:
             return JsonResponse({'message': 'User Does Not Exist'}, status=400)
