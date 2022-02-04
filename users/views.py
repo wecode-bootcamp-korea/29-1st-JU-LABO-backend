@@ -6,6 +6,8 @@ from django.core.exceptions import ValidationError
 
 from my_settings            import SECRET_KEY,ALGORITHM
 from users.models           import User
+from users.utils            import login_decorator
+
 
 
 REGEX_EMAIL = "^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+$"
