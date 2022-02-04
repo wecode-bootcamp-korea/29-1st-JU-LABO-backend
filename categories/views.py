@@ -43,6 +43,31 @@ class ProductListView(View):
     except:
       return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
 
+class ProductTypeView(View):
+  def get(self, request):
+    try:
+      category_subcategory_id    = request.GET.get('category_subcategory_id', None)
+      type_ml                    = request.GET.get('ml', None)
 
+      products = Product.objects.filter(categorysubcategory__id = category_subcategory_id, ml = type_ml)
+      image = Image.objects.all()
 
+      products = [{
+        'id'          : product.id,
+        'name'        : product.name,
+        'ml'          : product.ml,
+        'price'       : product.price,
+        'image':{
+          'img1': image.filter(product_id= product.id).values('image_url')[0],
+          'img2': image.filter(product_id= product.id).values('image_url')[1],
+          'img3': image.filter(product_id= product.id).values('image_url')[2]
+        },
+        'subcategory': {
+          'subcategory_id'  : product.categorysubcategory.subcategory.id,
+          'subcategory_name': product.categorysubcategory.subcategory.name
+        }
+      } for product in products]
 
+      return JsonResponse({'message': products}, status= 200)
+    except:
+      return JsonResponse({'message': 'KEY_ERROR'}, status=400)
