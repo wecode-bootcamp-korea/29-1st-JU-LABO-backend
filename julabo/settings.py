@@ -8,6 +8,10 @@ from my_settings import DATABASES, SECRET_KEY
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 pymysql.install_as_MySQLdb()
+<<<<<<< HEAD
+=======
+
+>>>>>>> main
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/

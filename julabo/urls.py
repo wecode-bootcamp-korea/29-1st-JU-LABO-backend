@@ -7,4 +7,5 @@ urlpatterns = [
   path('categories', include('categories.urls')),
   path('users', include('users.urls')),
   path('cart', CartView.as_view()),
+  path('productgroups', include('products.urls')),
 ]
