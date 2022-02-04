@@ -13,19 +13,20 @@ class Product(models.Model):
     inventory            = models.IntegerField()
     is_default           = models.BooleanField(default=False)
 
+
     class Meta:
         db_table = 'products'
  
 class Image(models.Model):
-    product   = models.ForeignKey(Product, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
     image_url = models.URLField(max_length=1000)
 
     class Meta:
         db_table = 'images'
 
 class ProductGroup(models.Model):
-    name      = models.CharField(max_length=50)
+    name    = models.CharField(max_length=50)
     image_url = models.URLField(max_length=1000)
     
     class Meta:
-        db_table = 'productgroups'
+        db_table = 'productgroups'  

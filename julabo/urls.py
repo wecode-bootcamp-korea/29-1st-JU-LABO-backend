@@ -4,6 +4,7 @@ from django.urls import path,include
 from users.views import CartView
 
 urlpatterns = [
-    # path('products', ProductDetailView.as_view())
-    path('cart', CartView.as_view())
+  path('categories', include('categories.urls')),
+  path('users', include('users.urls')),
+  path('cart', CartView.as_view()),
 ]
