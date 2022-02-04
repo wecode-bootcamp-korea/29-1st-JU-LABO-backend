@@ -52,7 +52,12 @@ class LogInView(View):
 
             if not User.objects.filter(email = user.email).exists():
                 return JsonResponse({"message": "INVALID_USER"}, status=401)
+<<<<<<< Updated upstream
 
+=======
+                
+                
+>>>>>>> Stashed changes
             if bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
                 
