@@ -382,6 +382,16 @@ zsdoc/data
 
 my_settings.py
 
-migrations
 
 __pycache__
+
+categorysubcategory.csv
+img_list_0128.csv
+productgroups.csv
+productgroups.csv:Zone.Identifier
+products_0128.csv
+products_0128.csv:Zone.Identifier
+db_uploader.py
+
+categories/migrations/**
+**/migrations/__init__.py
