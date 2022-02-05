@@ -16,8 +16,8 @@ class ProductListView(View):
         'ml'          : product.ml,
         'price'       : product.price,
         'subcategory': {
-          'subcategory_id'  : product.categorysubcategory.subcategory.id,
-          'subcategory_name': product.categorysubcategory.subcategory.name
+        'subcategory_id'  : product.categorysubcategory.subcategory.id,
+        'subcategory_name': product.categorysubcategory.subcategory.name
         }
       } for product in products]
 
