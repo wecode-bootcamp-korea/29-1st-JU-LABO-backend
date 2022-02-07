@@ -2,7 +2,7 @@ from pathlib import Path
 
 import pymysql
 
-from my_settings import DATABASES, SECRET_KEY
+from my_settings import DATABASES, SECRET_KEY ,ALGORITHM
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
