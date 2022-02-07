@@ -5,7 +5,6 @@ from categories.models import CategorySubCategory
 class Product(models.Model):
 
     categorysubcategory  = models.ForeignKey(CategorySubCategory, on_delete=models.CASCADE)
-    categorysubcategory  = models.ForeignKey(CategorySubCategory, on_delete=models.CASCADE)
     name                 = models.CharField(max_length=50)
     productgroup         = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
     price                = models.DecimalField(decimal_places=2, max_digits=6)
@@ -30,4 +29,4 @@ class ProductGroup(models.Model):
     image_url = models.URLField(max_length=1000)
     
     class Meta:
-        db_table = 'productgroups'
+        db_table = 'productgroups'  
