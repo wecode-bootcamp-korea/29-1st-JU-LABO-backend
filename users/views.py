@@ -4,7 +4,7 @@ from django.http            import JsonResponse
 from django.views           import View
 from django.core.exceptions import ValidationError
 
-from my_settings            import SECRET_KEY,ALGORITHM
+from django.conf            import settings
 from users.models           import User
 from users.utils            import login_decorator
 
@@ -47,16 +47,13 @@ class SignUpView(View):
 class LogInView(View):
     def post(self,request):
         try:
-            data = json.loads(request.body) 
+            data  = json.loads(request.body) 
             user  = User.objects.get(email=data['email'])
-
-            if not User.objects.filter(email = user.email).exists():
-                return JsonResponse({"message": "INVALID_USER"}, status=401)
                 
             if not bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({'message': 'INVALID_PASSWORD'}, status = 401)
                 
-            token = jwt.encode({'id': user.id}, SECRET_KEY, ALGORITHM)
+            token = jwt.encode({'id': user.id}, settings.SECRET_KEY, settings.ALGORITHM)
                 
             return JsonResponse({'message':'SUCCESS','token':token}, status=200)
 
