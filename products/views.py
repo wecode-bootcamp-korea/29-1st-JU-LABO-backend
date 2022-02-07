@@ -1,7 +1,7 @@
 from django.views import View
-from django.http import JsonResponse
+from django.http  import JsonResponse
 
-from .models import Product, Image
+from .models      import Product, Image
 
 class ProductGroupDetailView(View):
     def get(self, request, product_id):
@@ -13,11 +13,9 @@ class ProductGroupDetailView(View):
         if not Product.objects.filter(productgroup_id=productgroup_id).exists():
             return JsonResponse({'message':'productgroup_id error'}, status=400)
 
-        product = Product.objects.filter(id=product_id)
-
+        product        = Product.objects.filter(id=product_id)
         other_products = Product.objects.filter(productgroup_id=productgroup_id).exclude(id=product_id)
-
-        products = product.union(other_products)
+        products       = product.union(other_products)
 
         results = [
             {
