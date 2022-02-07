@@ -4,11 +4,20 @@ from django.http import JsonResponse
 from .models import Product, Image
 
 class ProductGroupDetailView(View):
-    def get(self, request, productgroup_id):
+    def get(self, request, product_id):
+        if not Product.objects.filter(id=product_id).exists():
+            return JsonResponse({'message':'product_id error'}, status=400)
+            
+        productgroup_id = Product.objects.get(id=product_id).productgroup_id
+
         if not Product.objects.filter(productgroup_id=productgroup_id).exists():
             return JsonResponse({'message':'productgroup_id error'}, status=400)
 
-        products = Product.objects.filter(productgroup_id=productgroup_id).order_by('is_default')
+        product = Product.objects.filter(id=product_id)
+
+        other_products = Product.objects.filter(productgroup_id=productgroup_id).exclude(id=product_id)
+
+        products = product.union(other_products)
 
         results = [
             {
@@ -25,6 +34,6 @@ class ProductGroupDetailView(View):
                 ]
             } for product in products
         ]
-        mls    = [result['ml'] for result in results]
-        prices = [result['price'] for result in results]
+        mls    = sorted([result['ml'] for result in results])
+        prices = sorted([result['price'] for result in results])
         return JsonResponse({'products': results, 'mls': mls, 'prices': prices}, status=200)
