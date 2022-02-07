@@ -9,13 +9,9 @@ class ProductGroupDetailView(View):
             return JsonResponse({'message':'product_id error'}, status=400)
             
         productgroup_id = Product.objects.get(id=product_id).productgroup_id
-
-        if not Product.objects.filter(productgroup_id=productgroup_id).exists():
-            return JsonResponse({'message':'productgroup_id error'}, status=400)
-
-        product        = Product.objects.filter(id=product_id)
-        other_products = Product.objects.filter(productgroup_id=productgroup_id).exclude(id=product_id)
-        products       = product.union(other_products)
+        product         = Product.objects.filter(id=product_id)
+        other_products  = Product.objects.filter(productgroup_id=productgroup_id).exclude(id=product_id)
+        products        = product.union(other_products)
 
         results = [
             {
