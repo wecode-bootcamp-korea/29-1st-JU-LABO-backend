@@ -4,25 +4,18 @@ from django.views     import View
 from django.http      import JsonResponse
 from django.db.models import F, Count
 
-import jwt
-
-from users.models    import Cart, User
-from products.models import Product
-# from users.utils     import login_decorator
-from django.conf     import settings
+from users.models     import Cart, User
+from products.models  import Product
+from users.utils      import login_decorator
 
 class CartView(View):
-    # @login_decorator
+    @login_decorator
     def post(self, request):
         try:
-            access_token = request.headers.get('Authorization')
-            payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-            user = User.objects.get(id=payload['id'])
-
-            data = json.loads(request.body)
-            user_id = user.id
+            data       = json.loads(request.body)
+            user_id    = request.user.id
             product_id = data['product_id']
-            quantity = data['quantity']
+            quantity   = data['quantity']
 
             cart, is_created = Cart.objects.get_or_create(
                 user_id=user_id, product_id=product_id)
@@ -37,15 +30,11 @@ class CartView(View):
         except User.DoesNotExist:
             return JsonResponse({'message': 'User id Does Not Exist'}, status=400)
 
-    # @login_decorator
+    @login_decorator
     def get(self, request):
-        # user = request.user
+        user = request.user
         try:
-            access_token = request.headers.get('Authorization')
-            payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-            user = User.objects.get(id=payload['id'])
-        
-            carts = Cart.objects.filter(user_id=user.id)
+            carts = Cart.objects.filter(user_id=request.user.id)
             
             results = [
                 {
@@ -56,7 +45,8 @@ class CartView(View):
                     'subcategory'  : cart.product.categorysubcategory.subcategory.name,
                     'size'         : cart.product.ml,
                     'cart_id'      : cart.id,
-                    'image_url'    : cart.product.image_set.all()[0].image_url
+                    'image_url'    : cart.product.image_set.all()[0].image_url,
+                    'product_id'   : cart.product.id
                 } 
                 for cart in carts]
 
@@ -70,31 +60,17 @@ class CartView(View):
         except User.DoesNotExist:
             return JsonResponse({'message': 'INVALID_USER'}, status=401)
 
-        except jwt.exceptions.DecodeError:
-            return JsonResponse({'message' : 'INVALID_TOKEN'} , status = 400)
-        
-        except User.DoesNotExist:
-            return JsonResponse({'message': 'User id Does Not Exist'}, status=400)
-
-    # @login_decorator
+    @login_decorator
     def delete(self, request, cart_id):
-        access_token = request.headers.get('Authorization')
-        payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-        user = User.objects.get(id=payload['id'])
-        user_id = user.id
-
+        user_id = request.user.id
         Cart.objects.filter(user_id=user_id, id=cart_id).delete()
         return JsonResponse({'message': 'No content'}, status=204)
 
-    # @login_decorator
+    @login_decorator
     def put(self, request):
-        # user = request.user
-        access_token = request.headers.get('Authorization')
-        payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-        user = User.objects.get(id=payload['id'])
-        user_id = user.id
-        data = json.loads(request.body)
-        cart_id = data['cart_id']
+        user_id  = request.user.id
+        data     = json.loads(request.body)
+        cart_id  = data['cart_id']
         quantity = data['quantity']
 
         cart = Cart.objects.filter(user_id=user_id, id=cart_id)
@@ -102,14 +78,12 @@ class CartView(View):
 
         return JsonResponse({'message': 'Success'}, status=201)
 
+
 class CartRecommendView(View):
+    @login_decorator
     def get(self, request):
         try:
-            access_token = request.headers.get('Authorization')
-            payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
-            user = User.objects.get(id=payload['id'])
-
-            carts = Cart.objects.filter(user_id=user.id)
+            carts = Cart.objects.filter(user_id=request.user.id)
             product_ids = [cart.product_id for cart in carts]
             field_name = 'product_id__categorysubcategory'
             results = carts.values(field_name).annotate(count=Count('product_id')).order_by('-count')
@@ -131,7 +105,5 @@ class CartRecommendView(View):
             return JsonResponse({'results': results}, status=200)
         except User.DoesNotExist:
             return JsonResponse({'message': 'INVALID_USER'}, status=401)
-        except jwt.exceptions.DecodeError:
-            return JsonResponse({'message' : 'INVALID_TOKEN'} , status = 400)
         except KeyError:
             return JsonResponse({'message': 'Key Error'}, status=400)
