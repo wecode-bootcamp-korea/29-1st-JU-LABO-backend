@@ -3,7 +3,7 @@ from django.http  import JsonResponse
 
 from .models      import Product, Image
 
-class ProductGroupDetailView(View):
+class ProductDetailView(View):
     def get(self, request, product_id):
         if not Product.objects.filter(id=product_id).exists():
             return JsonResponse({'message':'product_id error'}, status=400)
