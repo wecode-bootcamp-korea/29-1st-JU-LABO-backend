@@ -37,12 +37,17 @@ class ProductListView(View):
       type_ml                 = request.GET.get('ml', None)
       image                   = Image.objects.all()
       
-      filter_set = {
-        'categorysubcategory_id': category_subcategory_id,
-        'ml'                    : type_ml
-      }
+      # filter_set = {
+      #   'categorysubcategory_id': category_subcategory_id,
+      # }
       
-      products = Product.objects.filter(**filter_set) 
+      # products = Product.objects.filter(**filter_set) 
+
+      
+      if type_ml:
+        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id, ml = type_ml)
+      else:
+        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id) 
 
       products = [{   
         'id'             : product.id,
