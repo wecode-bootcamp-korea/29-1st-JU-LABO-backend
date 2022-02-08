@@ -35,7 +35,6 @@ class ProductListView(View):
     try:
       category_subcategory_id = request.GET.get('category_subcategory_id', None)
       type_ml                 = request.GET.get('ml', None)
-      image                   = Image.objects.all()
       
       # filter_set = {
       #   'categorysubcategory_id': category_subcategory_id,
@@ -55,7 +54,7 @@ class ProductListView(View):
         'ml'             : product.ml,
         'price'          : product.price,
         'productgroup_id': product.productgroup.id,
-        'image'          : [img for img in image.filter(product_id = product.id).values('image_url')],
+        'image'          : [image.image_url for image in product.image_set.all()],
         'subcategory': {
           'subcategory_id'  : product.categorysubcategory.subcategory.id,
           'subcategory_name': product.categorysubcategory.subcategory.name
@@ -64,5 +63,5 @@ class ProductListView(View):
 
       return JsonResponse({'products': products}, status= 200)
 
-    except:
+    except KeyError:
       return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
