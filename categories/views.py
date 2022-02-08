@@ -33,8 +33,8 @@ class ProductListView(View):
           'img3': image.filter(product_id= product.id).values('image_url')[2]
         },
         'subcategory': {
-          'subcategory_id'  : product.categorysubcategory.subcategory.id,
-          'subcategory_name': product.categorysubcategory.subcategory.name
+        'subcategory_id'  : product.categorysubcategory.subcategory.id,
+        'subcategory_name': product.categorysubcategory.subcategory.name
         }
       } for product in products]
 
