@@ -62,8 +62,7 @@ class CartView(View):
 
     @login_decorator
     def delete(self, request, cart_id):
-        user_id = request.user.id
-        Cart.objects.filter(user_id=user_id, id=cart_id).delete()
+        Cart.objects.filter(user_id=request.user.id, id=cart_id).delete()
         return JsonResponse({'message': 'No content'}, status=204)
 
     @login_decorator
