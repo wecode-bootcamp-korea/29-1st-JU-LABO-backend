@@ -1,3 +1,4 @@
+from tempfile import _TemporaryFileWrapper
 from django.views import View
 from django.http import JsonResponse
 
@@ -36,18 +37,16 @@ class ProductListView(View):
       category_subcategory_id = request.GET.get('category_subcategory_id', None)
       type_ml                 = request.GET.get('ml', None)
       
-      # filter_set = {
-      #   'categorysubcategory_id': category_subcategory_id,
-      # }
-      
-      # products = Product.objects.filter(**filter_set) 
+      filter_set = {}
 
-      
+      if category_subcategory_id:
+          filter_set["category_subcategory_id"] = category_subcategory_id
+
       if type_ml:
-        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id, ml = type_ml)
-      else:
-        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id) 
-
+          filter_set["type_ml"] = type_ml
+      
+      products = Product.objects.filter(**filter_set) 
+      
       products = [{   
         'id'             : product.id,
         'name'           : product.name,
