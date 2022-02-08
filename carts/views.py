@@ -9,14 +9,14 @@ import jwt
 
 from users.models           import Cart, User
 # from users.utils            import login_decorator
-from julabo.settings import SECRET_KEY, ALGORITHM
+from django.conf import settings
 
 class CartView(View):
     # @login_decorator
     def post(self, request):
         try:
             access_token = request.headers.get('Authorization')
-            payload = jwt.decode(access_token, SECRET_KEY, ALGORITHM)
+            payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
             user = User.objects.get(id=payload['id'])
 
             data = json.loads(request.body)
@@ -44,7 +44,7 @@ class CartView(View):
         # user = request.user
         try:
             access_token = request.headers.get('Authorization')
-            payload = jwt.decode(access_token, SECRET_KEY, ALGORITHM)
+            payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
             user = User.objects.get(id=payload['id'])
         
             carts = Cart.objects.filter(user_id=user.id)
@@ -56,7 +56,7 @@ class CartView(View):
                     'item_price'   : cart.product.price * cart.quantity,
                     'subcategory'  : cart.product.categorysubcategory.subcategory.name,
                     'size'         : cart.product.ml,
-                    'cart_id '     : cart.cart_id
+                    'cart_id '     : cart.id
                 } 
                 for cart in carts]
 
@@ -76,28 +76,28 @@ class CartView(View):
         except User.DoesNotExist:
             return JsonResponse({'message': 'User id Does Not Exist'}, status=400)
 
-    # @login_decorator # 여러 제품 삭제할 시 쿼리 파라미터로 요청
-    def delete(self, request,cart_id):
+    # @login_decorator
+    def delete(self, request, cart_id):
         access_token = request.headers.get('Authorization')
-        payload = jwt.decode(access_token, SECRET_KEY, ALGORITHM)
+        payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
         user = User.objects.get(id=payload['id'])
         user_id = user.id
 
-        Cart.objects.filter(user_id=user_id, cart_id=cart_id).delete()
+        Cart.objects.filter(user_id=user_id, id=cart_id).delete()
         return JsonResponse({'message': 'No content'}, status=204)
 
     # @login_decorator
-    def put(self, request, cart_id):
+    def put(self, request):
         # user = request.user
         access_token = request.headers.get('Authorization')
-        payload = jwt.decode(access_token, SECRET_KEY, ALGORITHM)
+        payload = jwt.decode(access_token, settings.SECRET_KEY, settings.ALGORITHM)
         user = User.objects.get(id=payload['id'])
         user_id = user.id
         data = json.loads(request.body)
-        product_id = data['product_id']
+        cart_id = data['cart_id']
         quantity = data['quantity']
 
-        cart = Cart.objects.filter(user_id=user_id, product_id=product_id)
+        cart = Cart.objects.filter(user_id=user_id, id=cart_id)
         cart.update(quantity=quantity)
 
         return JsonResponse({'message': 'Success'}, status=201)
