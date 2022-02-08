@@ -39,18 +39,16 @@ class ProductListView(View):
       category_subcategory_id = request.GET.get('category_subcategory_id', None)
       type_ml                 = request.GET.get('ml', None)
       
-      # filter_set = {
-      #   'categorysubcategory_id': category_subcategory_id,
-      # }
-      
-      # products = Product.objects.filter(**filter_set) 
+      filter_set = {}
 
-      
+      if category_subcategory_id:
+          filter_set["categorysubcategory_id"] = category_subcategory_id
+
       if type_ml:
-        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id, ml = type_ml)
-      else:
-        products = Product.objects.filter(categorysubcategory__id = category_subcategory_id) 
-
+          filter_set["ml"] = type_ml
+      
+      products = Product.objects.filter(**filter_set) 
+      
       products = [{   
         'id'             : product.id,
         'name'           : product.name,
@@ -67,4 +65,4 @@ class ProductListView(View):
       return JsonResponse({'products': products}, status= 200)
 
     except KeyError:
-      return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
+      return JsonResponse({'message': 'KEY_ERROR'}, status=400)

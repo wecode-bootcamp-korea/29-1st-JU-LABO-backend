@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('inventory', models.IntegerField()),
                 ('is_default', models.BooleanField(default=False)),
 
-                ('categoryjoin', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='categories.categorysubcategory')),
+                ('categorysubcategory', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='categories.categorysubcategory')),
 
                 ('productgroup', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='products.productgroup')),
             ],
