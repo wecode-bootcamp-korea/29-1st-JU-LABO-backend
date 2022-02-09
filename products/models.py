@@ -3,7 +3,6 @@ from django.db import models
 from categories.models import CategorySubCategory
 
 class Product(models.Model):
-
     categorysubcategory  = models.ForeignKey(CategorySubCategory, on_delete=models.CASCADE)
     name                 = models.CharField(max_length=50)
     productgroup         = models.ForeignKey('ProductGroup', on_delete=models.CASCADE)
