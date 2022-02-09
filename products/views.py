@@ -15,20 +15,21 @@ class ProductDetailView(View):
 
         results = [
             {
+                'product_id'         : product.id,
                 'name'               : product.name,
                 'category'           : product.categorysubcategory.category.name,
                 'subcategory'        : product.categorysubcategory.subcategory.name,
                 'ml'                 : product.ml,
                 'price'              : product.price,
                 'description'        : product.description,
-                'image_ulrs'         : [image.image_url for image in product.image_set.all()],
+                'image_urls'         : [image.image_url for image in product.image_set.all()],
                 'image_descriptions' : [
                     image.image_url.split('/')[-1].split('.')[0] 
                     for image in product.image_set.all()]
             } for product in products
         ]
-        mls    = [result['ml'] for result in results]
-        prices = [result['price'] for result in results]
+        mls    = sorted([result['ml'] for result in results])
+        prices = sorted([result['price'] for result in results])
         return JsonResponse({'products': results, 'mls': mls, 'prices': prices}, status=200)
 
 class ProductListView(View):
@@ -40,10 +41,10 @@ class ProductListView(View):
       filter_set = {}
 
       if category_subcategory_id:
-          filter_set["category_subcategory_id"] = category_subcategory_id
+          filter_set["categorysubcategory_id"] = category_subcategory_id
 
       if type_ml:
-          filter_set["type_ml"] = type_ml
+          filter_set["ml"] = type_ml
       
       products = Product.objects.filter(**filter_set) 
       
@@ -63,4 +64,4 @@ class ProductListView(View):
       return JsonResponse({'products': products}, status= 200)
 
     except KeyError:
-      return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
+      return JsonResponse({'message': 'KEY_ERROR'}, status=400)
