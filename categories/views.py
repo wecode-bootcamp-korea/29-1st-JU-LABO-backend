@@ -16,6 +16,3 @@ class SubCategoriesView(View):
     } for sub_category in SubCategory.objects.all()]
 
     return JsonResponse({'sub_categories': sub_categories}, status=200)
-
-
-
