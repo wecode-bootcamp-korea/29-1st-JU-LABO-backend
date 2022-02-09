@@ -1,18 +1,21 @@
-from tempfile import _TemporaryFileWrapper
 from django.views import View
-from django.http import JsonResponse
+from django.http  import JsonResponse
 
-from .models import Product, Image
+from .models      import Product, Image
 
 class ProductGroupDetailView(View):
-    def get(self, request, productgroup_id):
-        if not Product.objects.filter(productgroup_id=productgroup_id).exists():
-            return JsonResponse({'message':'productgroup_id error'}, status=400)
-
-        products = Product.objects.filter(productgroup_id=productgroup_id).order_by('is_default')
+    def get(self, request, product_id):
+        if not Product.objects.filter(id=product_id).exists():
+            return JsonResponse({'message':'product_id error'}, status=400)
+            
+        productgroup_id = Product.objects.get(id=product_id).productgroup_id
+        product         = Product.objects.filter(id=product_id)
+        other_products  = Product.objects.filter(productgroup_id=productgroup_id).exclude(id=product_id)
+        products        = product.union(other_products)
 
         results = [
             {
+                'product_id'         : product.id,
                 'name'               : product.name,
                 'category'           : product.categorysubcategory.category.name,
                 'subcategory'        : product.categorysubcategory.subcategory.name,
@@ -26,10 +29,9 @@ class ProductGroupDetailView(View):
                 ]
             } for product in products
         ]
-        mls    = [result['ml'] for result in results]
-        prices = [result['price'] for result in results]
+        mls    = sorted([result['ml'] for result in results])
+        prices = sorted([result['price'] for result in results])
         return JsonResponse({'products': results, 'mls': mls, 'prices': prices}, status=200)
-
 
 class ProductListView(View):
   def get(self,request):
@@ -40,10 +42,10 @@ class ProductListView(View):
       filter_set = {}
 
       if category_subcategory_id:
-          filter_set["category_subcategory_id"] = category_subcategory_id
+          filter_set["categorysubcategory_id"] = category_subcategory_id
 
       if type_ml:
-          filter_set["type_ml"] = type_ml
+          filter_set["ml"] = type_ml
       
       products = Product.objects.filter(**filter_set) 
       
@@ -63,4 +65,4 @@ class ProductListView(View):
       return JsonResponse({'products': products}, status= 200)
 
     except KeyError:
-      return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
+      return JsonResponse({'message': 'KEY_ERROR'}, status=400)

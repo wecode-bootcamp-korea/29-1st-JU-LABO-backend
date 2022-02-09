@@ -1,12 +1,14 @@
-import json, re , bcrypt, jwt 
+import json
+import re
 
-from django.http            import JsonResponse
 from django.views           import View
+from django.http            import JsonResponse
 
+import bcrypt
+import jwt
 
 from users.models           import User, UserProduct
 from products.models        import Product
-
 from django.conf            import settings
 from users.utils            import login_decorator
 
@@ -16,7 +18,8 @@ REGEX_PASSWORD = "^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$"
 class SignUpView(View):
     def post(self,request):
         try:
-            data = json.loads(request.body)    
+            data = json.loads(request.body)
+            
             firstname          = data['first_name']
             lastname           = data['last_name']
             email              = data['email']
@@ -60,8 +63,7 @@ class LogInView(View):
             return JsonResponse({'message':'SUCCESS','token':token}, status=201)
                   
         except KeyError:
-            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)        
-
+            return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
 
 class PopularProductView(View):
     def post(self,request):
