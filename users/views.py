@@ -58,8 +58,9 @@ class LogInView(View):
                 
             if not bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({'message': 'INVALID_PASSWORD'}, status = 401)
-                
-                return JsonResponse({'message':'SUCCESS','token':token}, status=201)
+
+            token = jwt.encode({'id': user.id}, settings.SECRET_KEY, settings.ALGORITHM)
+            return JsonResponse({'message':'SUCCESS','token':token}, status=201)
                   
         except KeyError:
             return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
@@ -80,9 +81,6 @@ class PopularProductView(View):
                 return JsonResponse({'message': '이미 눌렸습니다'}, status=200)
 
             return JsonResponse({'message': 'SUCCESS'}, status=200)
-
-        except KeyError:
-            return JsonResponse({'message': 'KEY_ERROR'}, status=400)
 
         except User.DoesNotExist:
             return JsonResponse({'message': "INVALID_USER"}, status = 404)
