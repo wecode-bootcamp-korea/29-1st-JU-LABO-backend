@@ -22,6 +22,8 @@ class CartView(View):
 
             cart.quantity = F('quantity') + quantity
             cart.save()
+
+
     
  
             return JsonResponse({'message': 'Success'}, status=200)

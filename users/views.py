@@ -55,15 +55,18 @@ class LogInView(View):
         try:
             data  = json.loads(request.body) 
             user  = User.objects.get(email=data['email'])
-                
+            username = {'username':user.first_name}
+
             if not bcrypt.checkpw(data['password'].encode('utf-8'), user.password.encode('utf-8')):
                 return JsonResponse({'message': 'INVALID_PASSWORD'}, status = 401)
 
             token = jwt.encode({'id': user.id}, settings.SECRET_KEY, settings.ALGORITHM)
-            return JsonResponse({'message':'SUCCESS','token':token}, status=201)
+            return JsonResponse({'message':'SUCCESS','token':token, 'username':username}, status=201)
                   
         except KeyError:
             return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
+        except User.DoesNotExist:
+            return JsonResponse({'message': 'INVALID_EMAIL'}, status=400)
 
 class PopularProductView(View):
     @login_decorator
