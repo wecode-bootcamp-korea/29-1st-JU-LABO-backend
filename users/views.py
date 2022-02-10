@@ -65,14 +65,15 @@ class LogInView(View):
             return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
 
 class PopularProductView(View):
+    @login_decorator
     def post(self,request):
         try:
             data = json.loads(request.body)
-            user = User.objects.get(id = data['user_id'])
+            
             product = Product.objects.get(id = data['product_id'])
 
             userproduct, is_userproduct = UserProduct.objects.get_or_create(
-               user_id = user.id,
+               user_id = request.user.id,
                product_id = product.id
             )
 
@@ -82,7 +83,10 @@ class PopularProductView(View):
             return JsonResponse({'message': 'SUCCESS'}, status=200)
 
         except User.DoesNotExist:
-            return JsonResponse({'message': "INVALID_USER"}, status = 404)     
+            return JsonResponse({'message': "INVALID_USER"}, status = 404)
+
+        except Product.DoesNotExist:    
+            return JsonResponse({'message': "INVALID_PRODUCT"}, status = 404)     
 
         except KeyError:
             return JsonResponse({'message' : 'KEY_ERROR'}, status=400)
