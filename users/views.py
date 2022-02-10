@@ -10,7 +10,7 @@ import jwt
 from users.models           import User, UserProduct
 from products.models        import Product
 from django.conf            import settings
-from users.utils            import login_decorator
+from .utils                 import login_decorator
 
 REGEX_EMAIL = "^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+$"
 REGEX_PASSWORD = "^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$"
@@ -66,14 +66,15 @@ class LogInView(View):
             return JsonResponse({'message' : 'KEY_ERROR'}, status=400)            
 
 class PopularProductView(View):
+    @login_decorator
     def post(self,request):
         try:
             data = json.loads(request.body)
-            user = User.objects.get(id = data['user_id'])
+            
             product = Product.objects.get(id = data['product_id'])
 
             userproduct, is_userproduct = UserProduct.objects.get_or_create(
-               user_id = user.id,
+               user_id = request.user.id,
                product_id = product.id
             )
 
