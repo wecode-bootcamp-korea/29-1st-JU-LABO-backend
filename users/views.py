@@ -10,6 +10,7 @@ import jwt
 from users.models           import User, UserProduct
 from products.models        import Product
 from django.conf            import settings
+from .utils                 import login_decorator
 
 REGEX_EMAIL = "^[a-zA-Z0-9._+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9.]+$"
 REGEX_PASSWORD = "^(?=.{8,16}$)(?=.*[a-z])(?=.*[0-9]).*$"

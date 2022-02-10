@@ -1,5 +1,6 @@
 from django.views import View
 from django.http  import JsonResponse
+from django.db.models import Count
 
 from .models      import Product
 
