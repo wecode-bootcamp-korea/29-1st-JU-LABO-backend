@@ -49,11 +49,14 @@ class ProductListView(View):
       if type_ml:
         filter_set["ml"] = type_ml
       
-      products = Product.objects.filter(**filter_set).annotate(count=Count('userproduct__id')).order_by(ordering)[:5]
+      products = Product.objects.filter(**filter_set) #.annotate(count=Count('userproduct__id')).order_by(ordering)[:5]
 
       if search_keyword:
         products = Product.objects.filter(name__icontains = search_keyword).select_related('categorysubcategory__subcategory')
-        
+
+      if ordering == '-count':
+        products = Product.objects.filter(**filter_set).annotate(count=Count('userproduct__product_id')).order_by(ordering)[:5]
+      
       products = [{   
         'id'             : product.id,
         'name'           : product.name,
