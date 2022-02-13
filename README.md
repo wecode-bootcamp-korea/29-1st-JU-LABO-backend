@@ -15,7 +15,25 @@
 
 ## **🔨 기술 스택**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/558c20de-3bf9-4eaa-8e33-2c77cf702a09/Untitled.png)
+### Frontend
+- HTML/CSS
+- JavaScript
+- React
+- SASS
+
+### Backend
+- python
+- django
+- mysql
+- postman
+
+### Version Control
+- github
+
+### Communication
+- Trello
+- Slack
+- Notion
 
 ## **📝 ERD**
 
