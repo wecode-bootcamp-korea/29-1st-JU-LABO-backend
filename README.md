@@ -1,5 +1,3 @@
-# 백엔드 readme.md
-
 # 2**9-1st-JULABO-backend**
 
 본 프로젝트는 학습을 목적으로  LE-LABO 사이트를 클론하여 진행되었습니다.
@@ -21,7 +19,7 @@
 
 ## **📝 ERD**
 
-![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/199d496b-2127-4234-93ec-e8678f412e54/Untitled.png)
+![julabo (1)](https://user-images.githubusercontent.com/66771425/153746775-ac1158fc-321e-4134-891c-281d5c3eca45.png)
 
 ## **🖥 구현 기능**
 
@@ -69,6 +67,9 @@
 ### 제품 추천 조회 기능
 
 - 제품과 유저 정보를 가져와 데이터를 저장하고 가장 많이 클릭된 상위 5개를 반환
+
+## API Documentation
+- [LINK](https://warped-resonance-891074.postman.co/workspace/My-Workspace~b131c86b-70c5-4537-8d26-b4a265c11c26/collection/19259271-054e1ba1-cd0a-4439-8881-1e94d4a9c8f8?ctx=documentation)
 
 ## ****Reference****
 
