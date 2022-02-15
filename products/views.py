@@ -73,4 +73,50 @@ class ProductListView(View):
       return JsonResponse({'products': products}, status= 200)
 
     except KeyError:
-      return JsonResponse({'message': 'KEY_ERROR'}, status=400) 
+      return JsonResponse({'message': 'KEY_ERROR'}, status=400)
+
+class ProductSearchView(View):
+    def get(self,request):
+      try:
+        keywords            = request.GET.get('keywords', None)
+        products            = Product.objects.filter(name__icontains = keywords).select_related('categorysubcategory__subcategory')
+        popular_products = UserProduct.objects.values('product_id').annotate(count=Count('id')).order_by('-count')
+        popular_products_id = UserProduct.objects.annotate(count=Count('id')).order_by('-count')
+        # popular_products    = Product.objects.filter(id__in =[product['product_id'] for product in popular_products_id])
+        
+        products = [{   
+        'id'             : product.id,
+        'name'           : product.name,
+        'ml'             : product.ml,
+        'price'          : product.price,
+        'productgroup_id': product.productgroup.id,
+        'image'          : [image.image_url for image in product.image_set.all()],
+        'subcategory': {
+          'subcategory_id'  : product.categorysubcategory.subcategory.id,
+          'subcategory_name': product.categorysubcategory.subcategory.name
+          }
+        } for product in products]
+
+        popular_products = [{   
+        'id'             : popular_product.product.id,
+        'name'           : popular_product.product.name,
+        'ml'             : popular_product.product.ml,
+        'price'          : popular_product.product.price,
+        'productgroup_id': popular_product.product.productgroup.id,
+        'image'          : [image.image_url for image in popular_product.product.image_set.all()],
+        'subcategory': {
+          'subcategory_id'  : popular_product.product.categorysubcategory.subcategory.id,
+          'subcategory_name': popular_product.product.categorysubcategory.subcategory.name
+          }
+        } for popular_product in popular_products_id]
+
+        popular_products_info = [popular_product for popular_product in popular_products]
+
+        # popular_products = [{'product_id': [product.name for product in popular_product.product_set.all()]}for popular_product in popular_products_id]
+
+      
+
+
+        return JsonResponse({'products': products , 'popular_products': popular_products, 'popular_products_info' : popular_products_info}, status=200)
+      except:
+        return JsonResponse({'message': 'KEY_ERROR'}, status=400)
